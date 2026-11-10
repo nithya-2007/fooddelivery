@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Craving Spot</title>
+    <link rel="stylesheet" href="cravings.css">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">Craving<span>Spot</span></div>
+
+    <nav>
+        <button onclick="showPage('home')">Home</button>
+        <button onclick="showPage('restaurants')">Restaurants</button>
+        <button onclick="goCheckout()">Checkout</button>
+    </nav>
+</header>
+
+
+<!-- HOME -->
+
+<section id="home" class="page active">
+
+    <main class="content">
+
+        <div class="hero">
+
+            <div class="heroText">
+
+                <p class="tag">FRESH • FAST • DELICIOUS</p>
+
+                <h1>
+                    Your cravings<br>
+                    deserve better.
+                </h1>
+
+                <p class="description">
+                    Discover delicious food from handpicked
+                    restaurants around you.
+                </p>
+
+                <button class="orangeBtn"
+                        onclick="showPage('restaurants')">
+                    Explore Restaurants →
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="sectionTitle">
+            <div>
+                <p class="tag">DISCOVER</p>
+                <h2>Popular Restaurants</h2>
+            </div>
+        </div>
+
+
+        <div class="restaurantGrid">
+
+            <div class="restaurantCard"
+                 onclick="openRestaurant('Spice Garden')">
+
+                <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4">
+
+                <h3>Spice Garden</h3>
+                <p>Indian Cuisine</p>
+
+                <span>⭐ 4.5</span>
+
+            </div>
+
+
+            <div class="restaurantCard"
+                 onclick="openRestaurant('Pizza Hub')">
+
+                <img src="https://images.unsplash.com/photo-1579751626657-72bc17010498">
+
+                <h3>Pizza Hub</h3>
+                <p>Pizza & Italian</p>
+
+                <span>⭐ 4.4</span>
+
+            </div>
+
+
+            <div class="restaurantCard"
+                 onclick="openRestaurant('Burger House')">
+
+                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd">
+
+                <h3>Burger House</h3>
+                <p>Burgers & Fries</p>
+
+                <span>⭐ 4.6</span>
+
+            </div>
+
+
+            <div class="restaurantCard"
+                 onclick="openRestaurant('South Spice')">
+
+                <img src="https://images.unsplash.com/photo-1589301760014-d929f3979dbc">
+
+                <h3>South Spice</h3>
+                <p>South Indian</p>
+
+                <span>⭐ 4.7</span>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- FULL HEIGHT CART -->
+
+    <aside class="cart">
+
+        <div class="cartTop">
+
+            <div>
+                <p class="tag">YOUR ORDER</p>
+                <h2>Your Cart</h2>
+            </div>
+
+            <div class="cartCircle">🛒</div>
+
+        </div>
+
+
+        <div id="cartItems" class="cartItems">
+
+            <div class="empty">
+
+                <div class="emptyIcon">🛍️</div>
+
+                <h3>Your cart is empty</h3>
+
+                <p>
+                    Choose something delicious
+                    to get started.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="cartBottom">
+
+            <div class="subtotal">
+                <span>Subtotal</span>
+                <strong id="total">₹0</strong>
+            </div>
+
+            <button class="checkoutBtn"
+                    onclick="goCheckout()">
+                Proceed to Checkout →
+            </button>
+
+        </div>
+
+    </aside>
+
+</section>
+
+
+<!-- RESTAURANT MENU -->
+
+<section id="restaurants" class="page">
+
+    <div class="menuHeader">
+
+        <div>
+            <p class="tag">OUR MENU</p>
+            <h2 id="restaurantTitle">Restaurant</h2>
+        </div>
+
+        <button class="backBtn"
+                onclick="showPage('home')">
+            ← Back
+        </button>
+
+    </div>
+
+
+    <div id="foodList" class="foodGrid"></div>
+
+</section>
+
+
+<!-- CHECKOUT -->
+
+<section id="checkout" class="page">
+
+    <div class="checkoutBox">
+
+        <p class="tag">CHECKOUT</p>
+
+        <h2>Complete Your Order</h2>
+
+
+        <label>Phone Number</label>
+
+        <input
+            type="tel"
+            id="phone"
+            placeholder="Enter phone number">
+
+
+        <label>Delivery Address</label>
+
+        <textarea
+            id="address"
+            placeholder="Enter complete delivery address"></textarea>
+
+
+        <h3>Payment Method</h3>
+
+
+        <label class="payment">
+            <input type="radio"
+                   name="payment"
+                   checked>
+            Cash on Delivery
+        </label>
+
+
+        <label class="payment">
+            <input type="radio"
+                   name="payment">
+            UPI
+        </label>
+
+
+        <label class="payment">
+            <input type="radio"
+                   name="payment">
+            Card
+        </label>
+
+
+        <button class="orangeBtn full"
+                onclick="placeOrder()">
+            Place Order
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- SUCCESS -->
+
+<section id="success" class="page">
+
+    <div class="successBox">
+
+        <div class="successIcon">✓</div>
+
+        <h1>Order Confirmed!</h1>
+
+        <p>
+            Your food is being prepared
+            and will be delivered soon.
+        </p>
+
+        <button class="orangeBtn"
+                onclick="showPage('home')">
+            Back to Home
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- TOAST -->
+
+<div id="toast"></div>
+
+
+<script src="cravings.js"></script>
+
+</body>
+</html>
