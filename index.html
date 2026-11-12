@@ -1,10 +1,636 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Craving Spot</title>
-    <link rel="stylesheet" href="cravings.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Craving Spot</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f7f5f1;
+    color: #292621;
+    font-size: 14px;
+}
+
+/* HEADER */
+header {
+    height: 80px;
+    padding: 0 6%;
+    background: #211f1c;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.logo span {
+    color: #ff8a00;
+}
+
+nav button {
+    background: none;
+    border: 0;
+    color: #ddd;
+    padding: 8px 13px;
+    cursor: pointer;
+}
+
+nav button:hover {
+    color: #ff8a00;
+}
+
+/* PAGE */
+.page {
+    display: none;
+}
+
+.active {
+    display: block;
+}
+
+/* HOME */
+#home {
+    width: 100%;
+    min-height: calc(100vh - 60px);
+    display: none;
+    padding-left: 6%;
+    padding-right: 390px;
+}
+
+#home.active {
+    display: block;
+}
+
+.content {
+    max-width: 1100px;
+    padding: 25px 0;
+}
+
+/* HERO */
+.hero {
+    height: 285px;
+    border-radius: 17px;
+    padding: 35px;
+    display: flex;
+    align-items: center;
+    color: white;
+    background:
+        linear-gradient(90deg, #17130fd9, #17130f30),
+        url("https://images.unsplash.com/photo-1571091718767-18b5b1457add")
+        center/cover;
+}
+
+.heroText {
+    max-width: 450px;
+}
+
+.tag {
+    color: #ff8a00;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.hero h1 {
+    font-size: 40px;
+    line-height: 1.08;
+    margin: 8px 0 10px;
+}
+
+.description {
+    color: #eee;
+    line-height: 1.5;
+    margin-bottom: 18px;
+}
+
+/* BUTTON */
+.orangeBtn {
+    background: #ff8a00;
+    color: #211f1c;
+    border: 0;
+    padding: 11px 18px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.orangeBtn:hover {
+    background: #ffad42;
+    transform: translateY(-1px);
+}
+
+/* SECTION */
+.sectionTitle {
+    margin: 22px 0 12px;
+}
+
+.sectionTitle h2 {
+    font-size: 21px;
+    margin-top: 5px;
+}
+
+/* RESTAURANTS */
+.restaurantGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.restaurantCard {
+    background: white;
+    padding: 7px;
+    border-radius: 10px;
+    border: 1px solid #eee;
+    cursor: pointer;
+    position: relative;
+    transition: .2s;
+}
+
+.restaurantCard:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px #00000012;
+}
+
+.restaurantCard img {
+    width: 100%;
+    height: 105px;
+    object-fit: cover;
+    border-radius: 7px;
+}
+
+.restaurantCard h3 {
+    font-size: 14px;
+    margin: 8px 3px 3px;
+}
+
+.restaurantCard p {
+    color: #888;
+    font-size: 10px;
+    margin-left: 3px;
+}
+
+.restaurantCard span {
+    display: block;
+    margin: 5px 3px;
+    font-size: 10px;
+    color: #c56e00;
+}
+
+/* CART */
+.cart {
+    position: fixed;
+    right: 0;
+    top: 60px;
+    width: 365px;
+    height: calc(100vh - 60px);
+    background: white;
+    border-left: 1px solid #e7e3de;
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+}
+
+.cartTop {
+    padding: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+
+.cartTop h2 {
+    font-size: 22px;
+    margin-top: 4px;
+}
+
+.cartCircle {
+    width: 42px;
+    height: 42px;
+    background: #fff0df;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+}
+
+.cartItems {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px 20px;
+}
+
+.empty {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #999;
+}
+
+.emptyIcon {
+    font-size: 40px;
+    margin-bottom: 12px;
+}
+
+.empty h3 {
+    color: #444;
+    font-size: 15px;
+    margin-bottom: 5px;
+}
+
+.empty p {
+    font-size: 11px;
+    max-width: 180px;
+    line-height: 1.5;
+}
+
+/* CART ITEM */
+.cartItem {
+    display: flex;
+    gap: 10px;
+    padding: 13px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.cartItem img {
+    width: 58px;
+    height: 58px;
+    object-fit: cover;
+    border-radius: 7px;
+}
+
+.cartInfo {
+    flex: 1;
+}
+
+.cartInfo h4 {
+    font-size: 13px;
+    margin-bottom: 3px;
+}
+
+.restaurantName {
+    color: #999;
+    font-size: 10px;
+}
+
+.itemPrice {
+    font-weight: bold;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.quantity {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 6px;
+}
+
+.quantity button {
+    width: 22px;
+    height: 22px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.quantity button:hover {
+    border-color: #ff8a00;
+    color: #ff8a00;
+}
+
+.remove {
+    background: none !important;
+    border: 0 !important;
+    color: #999;
+    width: auto !important;
+    margin-left: 4px;
+    font-size: 10px;
+}
+
+/* CART BOTTOM */
+.cartBottom {
+    padding: 18px 20px;
+    border-top: 1px solid #eee;
+    background: #fff;
+}
+
+.subtotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 13px;
+}
+
+.subtotal span {
+    color: #777;
+}
+
+.subtotal strong {
+    font-size: 20px;
+}
+
+.checkoutBtn {
+    width: 100%;
+    border: 0;
+    background: #ff8a00;
+    color: #211f1c;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.checkoutBtn:hover {
+    background: #ffad42;
+}
+
+/* RESTAURANT PAGE */
+#restaurants {
+    width: 88%;
+    max-width: 1150px;
+    margin: auto;
+    padding: 25px 0;
+}
+
+.menuHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.menuHeader h2 {
+    font-size: 24px;
+    margin-top: 5px;
+}
+
+.backBtn {
+    background: white;
+    border: 1px solid #ddd;
+    padding: 8px 13px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.foodGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.foodCard {
+    background: white;
+    padding: 8px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px #0000000a;
+}
+
+.foodCard img {
+    width: 100%;
+    height: 135px;
+    object-fit: cover;
+    border-radius: 7px;
+}
+
+.foodCard h3 {
+    font-size: 14px;
+    margin: 9px 2px;
+}
+
+.foodBottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.foodPrice {
+    font-weight: bold;
+}
+
+.addBtn {
+    border: 0;
+    background: #ff8a00;
+    color: #211f1c;
+    padding: 7px 10px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.addBtn:hover {
+    background: #ffad42;
+}
+
+/* CHECKOUT */
+#checkout {
+    width: 88%;
+    max-width: 1000px;
+    margin: auto;
+    padding: 45px 0;
+}
+
+.checkoutBox {
+    background: white;
+    max-width: 480px;
+    margin: auto;
+    padding: 27px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px #0000000d;
+}
+
+.checkoutBox h2 {
+    font-size: 23px;
+    margin: 5px 0 20px;
+}
+
+.checkoutBox h3 {
+    font-size: 14px;
+    margin-top: 17px;
+}
+
+.checkoutBox label {
+    display: block;
+    font-size: 12px;
+    margin-top: 11px;
+}
+
+input[type="tel"],
+textarea {
+    width: 100%;
+    margin-top: 5px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    font-size: 12px;
+}
+
+textarea {
+    height: 80px;
+    resize: none;
+}
+
+.payment {
+    margin: 9px 0 !important;
+}
+
+.full {
+    width: 100%;
+    margin-top: 15px;
+}
+
+/* SUCCESS */
+#success {
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.successBox {
+    background: white;
+    max-width: 450px;
+    margin: auto;
+    padding: 40px 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px #0000000d;
+}
+
+.successIcon {
+    width: 55px;
+    height: 55px;
+    margin: auto;
+    background: #ff8a00;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.successBox h1 {
+    margin: 15px 0 7px;
+}
+
+.successBox p {
+    color: #777;
+    font-size: 12px;
+    margin-bottom: 18px;
+}
+
+/* TOAST */
+#toast {
+    position: fixed;
+    right: 390px;
+    bottom: 25px;
+    background: #211f1c;
+    color: white;
+    padding: 11px 17px;
+    border-left: 4px solid #ff8a00;
+    border-radius: 6px;
+    font-size: 12px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: .3s;
+    z-index: 100;
+}
+
+#toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* RESPONSIVE */
+@media(max-width:1000px) {
+    #home {
+        padding-right: 330px;
+    }
+
+    .cart {
+        width: 330px;
+    }
+
+    .restaurantGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    #toast {
+        right: 350px;
+    }
+}
+
+@media(max-width:700px) {
+    header {
+        height: auto;
+        padding: 12px;
+        display: block;
+        text-align: center;
+    }
+
+    nav {
+        margin-top: 6px;
+    }
+
+    #home {
+        padding: 15px;
+    }
+
+    .content {
+        padding: 0;
+    }
+
+    .cart {
+        position: relative;
+        top: auto;
+        right: auto;
+        width: 100%;
+        height: 450px;
+        margin-top: 20px;
+        border: 1px solid #eee;
+        border-radius: 12px;
+    }
+
+    .hero {
+        height: 250px;
+    }
+
+    .hero h1 {
+        font-size: 30px;
+    }
+
+    .restaurantGrid,
+    .foodGrid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    #restaurants,
+    #checkout {
+        width: 92%;
+    }
+
+    #toast {
+        right: 20px;
+    }
+}
+</style>
 </head>
 
 <body>
@@ -13,251 +639,161 @@
     <div class="logo">Craving<span>Spot</span></div>
 
     <nav>
-        <button onclick="showPage('home')">Home</button>
-        <button onclick="showPage('restaurants')">Restaurants</button>
-        <button onclick="goCheckout()">Checkout</button>
+        <button type="button" onclick="showPage('home')">Home</button>
+        <button type="button" onclick="showPage('restaurants')">Restaurants</button>
+        <button type="button" onclick="goCheckout()">Checkout</button>
     </nav>
 </header>
 
-
-<!-- HOME -->
-
+<!-- HOME PAGE -->
 <section id="home" class="page active">
 
     <main class="content">
 
         <div class="hero">
-
             <div class="heroText">
-
                 <p class="tag">FRESH • FAST • DELICIOUS</p>
-
-                <h1>
-                    Your cravings<br>
-                    deserve better.
-                </h1>
-
+                <h1>Your cravings<br>deserve better.</h1>
                 <p class="description">
-                    Discover delicious food from handpicked
-                    restaurants around you.
+                    Discover delicious food from handpicked restaurants.
+                    Order your favourites and enjoy them at home.
                 </p>
-
-                <button class="orangeBtn"
-                        onclick="showPage('restaurants')">
-                    Explore Restaurants →
+                <button class="orangeBtn" onclick="showPage('restaurants')">
+                    Explore Food
                 </button>
-
             </div>
-
         </div>
-
 
         <div class="sectionTitle">
-            <div>
-                <p class="tag">DISCOVER</p>
-                <h2>Popular Restaurants</h2>
-            </div>
+            <p class="tag">DISCOVER</p>
+            <h2>Popular Restaurants</h2>
         </div>
-
 
         <div class="restaurantGrid">
 
-            <div class="restaurantCard"
-                 onclick="openRestaurant('Spice Garden')">
-
-                <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4">
-
+            <div class="restaurantCard" onclick="openRestaurant('Spice Garden')">
+                <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4" alt="Spice Garden">
                 <h3>Spice Garden</h3>
                 <p>Indian Cuisine</p>
-
                 <span>⭐ 4.5</span>
-
             </div>
 
-
-            <div class="restaurantCard"
-                 onclick="openRestaurant('Pizza Hub')">
-
-                <img src="https://images.unsplash.com/photo-1579751626657-72bc17010498">
-
+            <div class="restaurantCard" onclick="openRestaurant('Pizza Hub')">
+                <img src="https://images.unsplash.com/photo-1579751626657-72bc17010498" alt="Pizza Hub">
                 <h3>Pizza Hub</h3>
-                <p>Pizza & Italian</p>
-
+                <p>Pizza &amp; Italian</p>
                 <span>⭐ 4.4</span>
-
             </div>
 
-
-            <div class="restaurantCard"
-                 onclick="openRestaurant('Burger House')">
-
-                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd">
-
+            <div class="restaurantCard" onclick="openRestaurant('Burger House')">
+                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd" alt="Burger House">
                 <h3>Burger House</h3>
-                <p>Burgers & Fries</p>
-
+                <p>Burgers &amp; Fries</p>
                 <span>⭐ 4.6</span>
-
             </div>
 
-
-            <div class="restaurantCard"
-                 onclick="openRestaurant('South Spice')">
-
-                <img src="https://images.unsplash.com/photo-1589301760014-d929f3979dbc">
-
+            <div class="restaurantCard" onclick="openRestaurant('South Spice')">
+                <img src="https://images.unsplash.com/photo-1589301760014-d929f3979dbc" alt="South Spice">
                 <h3>South Spice</h3>
                 <p>South Indian</p>
-
                 <span>⭐ 4.7</span>
-
             </div>
 
         </div>
-
     </main>
 
-
-    <!-- FULL HEIGHT CART -->
-
+    <!-- CART -->
     <aside class="cart">
 
         <div class="cartTop">
-
             <div>
                 <p class="tag">YOUR ORDER</p>
                 <h2>Your Cart</h2>
             </div>
-
             <div class="cartCircle">🛒</div>
-
         </div>
 
-
-        <div id="cartItems" class="cartItems">
-
-            <div class="empty">
-
-                <div class="emptyIcon">🛍️</div>
-
-                <h3>Your cart is empty</h3>
-
-                <p>
-                    Choose something delicious
-                    to get started.
-                </p>
-
-            </div>
-
-        </div>
-
+        <div id="cartItems" class="cartItems"></div>
 
         <div class="cartBottom">
-
             <div class="subtotal">
                 <span>Subtotal</span>
                 <strong id="total">₹0</strong>
             </div>
 
-            <button class="checkoutBtn"
-                    onclick="goCheckout()">
+            <button class="checkoutBtn" onclick="goCheckout()">
                 Proceed to Checkout →
             </button>
-
         </div>
 
     </aside>
-
 </section>
 
-
-<!-- RESTAURANT MENU -->
-
+<!-- RESTAURANT PAGE -->
 <section id="restaurants" class="page">
 
     <div class="menuHeader">
-
         <div>
             <p class="tag">OUR MENU</p>
             <h2 id="restaurantTitle">Restaurant</h2>
         </div>
 
-        <button class="backBtn"
-                onclick="showPage('home')">
+        <button class="backBtn" onclick="showPage('home')">
             ← Back
         </button>
-
     </div>
-
 
     <div id="foodList" class="foodGrid"></div>
 
 </section>
 
-
-<!-- CHECKOUT -->
-
+<!-- CHECKOUT PAGE -->
 <section id="checkout" class="page">
 
     <div class="checkoutBox">
 
         <p class="tag">CHECKOUT</p>
-
         <h2>Complete Your Order</h2>
 
-
-        <label>Phone Number</label>
-
+        <label for="phone">Phone Number</label>
         <input
             type="tel"
             id="phone"
-            placeholder="Enter phone number">
+            placeholder="Enter phone number"
+            maxlength="10"
+        >
 
-
-        <label>Delivery Address</label>
-
+        <label for="address">Delivery Address</label>
         <textarea
             id="address"
-            placeholder="Enter complete delivery address"></textarea>
-
+            placeholder="Enter complete delivery address"
+        ></textarea>
 
         <h3>Payment Method</h3>
 
-
         <label class="payment">
-            <input type="radio"
-                   name="payment"
-                   checked>
+            <input type="radio" name="payment" value="Cash on Delivery" checked>
             Cash on Delivery
         </label>
 
-
         <label class="payment">
-            <input type="radio"
-                   name="payment">
+            <input type="radio" name="payment" value="UPI">
             UPI
         </label>
 
-
         <label class="payment">
-            <input type="radio"
-                   name="payment">
+            <input type="radio" name="payment" value="Card">
             Card
         </label>
 
-
-        <button class="orangeBtn full"
-                onclick="placeOrder()">
+        <button class="orangeBtn full" onclick="placeOrder()">
             Place Order
         </button>
 
     </div>
-
 </section>
 
-
-<!-- SUCCESS -->
-
+<!-- SUCCESS PAGE -->
 <section id="success" class="page">
 
     <div class="successBox">
@@ -267,26 +803,370 @@
         <h1>Order Confirmed!</h1>
 
         <p>
-            Your food is being prepared
-            and will be delivered soon.
+            Your food is being prepared and will be delivered soon.
         </p>
 
-        <button class="orangeBtn"
-                onclick="showPage('home')">
+        <button class="orangeBtn" onclick="showPage('home')">
             Back to Home
         </button>
 
     </div>
-
 </section>
 
+<div id="toast" role="status" aria-live="polite"></div>
 
-<!-- TOAST -->
+<script>
 
-<div id="toast"></div>
+/* FOOD MENU */
+
+const menu = {
+
+    "Spice Garden": [
+        ["Chicken Biryani", 180, "https://www.cubesnjuliennes.com/wp-content/uploads/2020/07/Chicken-Biryani-Recipe.jpg"],
+        ["Paneer Biryani", 160, "https://images.unsplash.com/photo-1596797038530-2c107229654b"],
+        ["Butter Chicken", 220, "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398"],
+        ["Paneer Tikka", 150, "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8"]
+    ],
+
+    "Pizza Hub": [
+        ["Margherita Pizza", 180, "https://images.unsplash.com/photo-1574071318508-1cdbab80d002"],
+        ["Cheese Pizza", 220, "https://images.unsplash.com/photo-1579751626657-72bc17010498"],
+        ["Farmhouse Pizza", 250, "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38"],
+        ["Chicken Pizza", 280, "https://images.unsplash.com/photo-1565299507177-b0ac66763828"]
+    ],
+
+    "Burger House": [
+        ["Classic Burger", 120, "https://images.unsplash.com/photo-1568901346375-23c9450c58cd"],
+        ["Cheese Burger", 150, "https://images.unsplash.com/photo-1571091718767-18b5b1457add"],
+        ["Chicken Burger", 180, "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5"],
+        ["French Fries", 90, "https://images.unsplash.com/photo-1573080496219-bb080dd4f877"]
+    ],
+
+    "South Spice": [
+        ["Masala Dosa", 80, "https://images.unsplash.com/photo-1567337710282-00832b415979"],
+        ["Idli Sambar", 70, "https://images.unsplash.com/photo-1589301760014-d929f3979dbc"],
+        ["Poori Masala", 90, "https://images.unsplash.com/photo-1601050690597-df0568f70950"],
+        ["Vada", 50, "https://images.unsplash.com/photo-1601050690117-94f5f6fa8bd7"]
+    ]
+
+};
+
+let cart = [];
+let toastTimer;
 
 
-<script src="cravings.js"></script>
+/* PAGE NAVIGATION */
+
+function showPage(id) {
+
+    document.querySelectorAll(".page").forEach(page => {
+        page.classList.remove("active");
+    });
+
+    const target = document.getElementById(id);
+
+    if (target) {
+        target.classList.add("active");
+    }
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+/* OPEN RESTAURANT */
+
+function openRestaurant(name) {
+
+    if (!menu[name]) return;
+
+    document.getElementById("restaurantTitle").textContent = name;
+
+    const foodList = document.getElementById("foodList");
+
+    foodList.innerHTML = "";
+
+    menu[name].forEach(item => {
+
+        const card = document.createElement("div");
+        card.className = "foodCard";
+
+        const img = document.createElement("img");
+        img.src = item[2];
+        img.alt = item[0];
+        img.loading = "lazy";
+
+        const title = document.createElement("h3");
+        title.textContent = item[0];
+
+        const bottom = document.createElement("div");
+        bottom.className = "foodBottom";
+
+        const price = document.createElement("span");
+        price.className = "foodPrice";
+        price.textContent = "₹" + item[1];
+
+        const button = document.createElement("button");
+        button.className = "addBtn";
+        button.type = "button";
+        button.textContent = "+ Add";
+
+        button.addEventListener("click", function () {
+            addToCart(name, item[0], item[1], item[2]);
+        });
+
+        bottom.append(price, button);
+        card.append(img, title, bottom);
+
+        foodList.appendChild(card);
+
+    });
+
+    showPage("restaurants");
+}
+
+
+/* ADD TO CART */
+
+function addToCart(restaurant, name, price, image) {
+
+    const existing = cart.find(item =>
+        item.restaurant === restaurant &&
+        item.name === name
+    );
+
+    if (existing) {
+        existing.quantity += 1;
+    } else {
+        cart.push({
+            restaurant,
+            name,
+            price,
+            image,
+            quantity: 1
+        });
+    }
+
+    updateCart();
+
+    showToast(name + " added to cart");
+}
+
+
+/* UPDATE CART */
+
+function updateCart() {
+
+    const container = document.getElementById("cartItems");
+    const totalElement = document.getElementById("total");
+
+    if (cart.length === 0) {
+
+        container.innerHTML = `
+            <div class="empty">
+                <div class="emptyIcon">🛍️</div>
+                <h3>Your cart is empty</h3>
+                <p>Choose something delicious to get started.</p>
+            </div>
+        `;
+
+        totalElement.textContent = "₹0";
+        return;
+    }
+
+    let total = 0;
+
+    container.innerHTML = "";
+
+    cart.forEach((item, index) => {
+
+        total += item.price * item.quantity;
+
+        const row = document.createElement("div");
+        row.className = "cartItem";
+
+        const img = document.createElement("img");
+        img.src = item.image;
+        img.alt = item.name;
+
+        const info = document.createElement("div");
+        info.className = "cartInfo";
+
+        const title = document.createElement("h4");
+        title.textContent = item.name;
+
+        const restaurant = document.createElement("div");
+        restaurant.className = "restaurantName";
+        restaurant.textContent = item.restaurant;
+
+        const price = document.createElement("div");
+        price.className = "itemPrice";
+        price.textContent = "₹" + (item.price * item.quantity);
+
+        const quantity = document.createElement("div");
+        quantity.className = "quantity";
+
+        const minus = document.createElement("button");
+        minus.type = "button";
+        minus.textContent = "−";
+        minus.setAttribute("aria-label", "Decrease quantity");
+
+        minus.addEventListener("click", () => {
+            changeQuantity(index, -1);
+        });
+
+        const count = document.createElement("span");
+        count.textContent = item.quantity;
+
+        const plus = document.createElement("button");
+        plus.type = "button";
+        plus.textContent = "+";
+        plus.setAttribute("aria-label", "Increase quantity");
+
+        plus.addEventListener("click", () => {
+            changeQuantity(index, 1);
+        });
+
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.className = "remove";
+        remove.textContent = "Remove";
+
+        remove.addEventListener("click", () => {
+            removeItem(index);
+        });
+
+        quantity.append(minus, count, plus, remove);
+
+        info.append(title, restaurant, price, quantity);
+
+        row.append(img, info);
+
+        container.appendChild(row);
+
+    });
+
+    totalElement.textContent = "₹" + total;
+}
+
+
+/* CHANGE QUANTITY */
+
+function changeQuantity(index, amount) {
+
+    if (!cart[index]) return;
+
+    cart[index].quantity += amount;
+
+    if (cart[index].quantity <= 0) {
+        cart.splice(index, 1);
+    }
+
+    updateCart();
+}
+
+
+/* REMOVE ITEM */
+
+function removeItem(index) {
+
+    cart.splice(index, 1);
+
+    updateCart();
+
+    showToast("Item removed from cart");
+}
+
+
+/* TOAST MESSAGE */
+
+function showToast(message) {
+
+    const toast = document.getElementById("toast");
+
+    toast.textContent = "✓  " + message;
+
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+    }, 1800);
+}
+
+
+/* CHECKOUT */
+
+function goCheckout() {
+
+    if (cart.length === 0) {
+        showToast("Your cart is empty");
+        return;
+    }
+
+    showPage("checkout");
+}
+
+
+/* PLACE ORDER */
+
+function placeOrder() {
+
+    const phone = document.getElementById("phone").value.trim();
+
+    const address = document.getElementById("address").value.trim();
+
+    const payment = document.querySelector(
+        'input[name="payment"]:checked'
+    );
+
+    if (!/^[0-9]{10}$/.test(phone)) {
+
+        showToast("Please enter a valid 10-digit phone number");
+
+        document.getElementById("phone").focus();
+
+        return;
+    }
+
+    if (address.length < 8) {
+
+        showToast("Please enter your complete delivery address");
+
+        document.getElementById("address").focus();
+
+        return;
+    }
+
+    if (!payment) {
+
+        showToast("Please select a payment method");
+
+        return;
+    }
+
+    cart = [];
+
+    updateCart();
+
+    document.getElementById("phone").value = "";
+
+    document.getElementById("address").value = "";
+
+    showPage("success");
+
+    showToast("Order placed successfully");
+}
+
+
+/* INITIALIZE */
+
+updateCart();
+
+</script>
 
 </body>
 </html>
